@@ -20,8 +20,8 @@ package main
 // int parse_SX1301_configuration(const char * conf_file) {
 //     int i;
 //     const char conf_obj[] = "SX1301_conf";
-//     char param_name[32]; /* used to generate variable parameter names */
-//     const char *str; /* used to store string value from JSON object */
+//     char param_name[32]; 
+//     const char *str; 
 //     struct lgw_conf_board_s boardconf;
 //     struct lgw_conf_rxrf_s rfconf;
 //     struct lgw_conf_rxif_s ifconf;
@@ -31,7 +31,7 @@ package main
 //     JSON_Value *val;
 //     uint32_t sf, bw;
 
-//     /* try to parse JSON */
+//    
 //     root_val = json_parse_file_with_comments(conf_file);
 //     root = json_value_get_object(root_val);
 //     if (root == NULL) {
@@ -45,17 +45,15 @@ package main
 //     } else {
 //         MSG("INFO: %s does contain a JSON object named %s, parsing SX1301 parameters\n", conf_file, conf_obj);
 //     }
-
-//     /* set board configuration */
-//     memset(&boardconf, 0, sizeof boardconf); /* initialize configuration structure */
-//     val = json_object_get_value(conf, "lorawan_public"); /* fetch value (if possible) */
+//     memset(&boardconf, 0, sizeof boardconf); 
+//     val = json_object_get_value(conf, "lorawan_public");
 //     if (json_value_get_type(val) == JSONBoolean) {
 //         boardconf.lorawan_public = (bool)json_value_get_boolean(val);
 //     } else {
 //         MSG("WARNING: Data type for lorawan_public seems wrong, please check\n");
 //         boardconf.lorawan_public = false;
 //     }
-//     val = json_object_get_value(conf, "clksrc"); /* fetch value (if possible) */
+//     val = json_object_get_value(conf, "clksrc"); 
 //     if (json_value_get_type(val) == JSONNumber) {
 //         boardconf.clksrc = (uint8_t)json_value_get_number(val);
 //     } else {
@@ -63,22 +61,20 @@ package main
 //         boardconf.clksrc = 0;
 //     }
 //     MSG("INFO: lorawan_public %d, clksrc %d\n", boardconf.lorawan_public, boardconf.clksrc);
-//     /* all parameters parsed, submitting configuration to the HAL */
 //     if (lgw_board_setconf(boardconf) != LGW_HAL_SUCCESS) {
 //         MSG("ERROR: Failed to configure board\n");
 //         return -1;
 //     }
 
-//     /* set configuration for RF chains */
 //     for (i = 0; i < LGW_RF_CHAIN_NB; ++i) {
-//         memset(&rfconf, 0, sizeof(rfconf)); /* initialize configuration structure */
-//         sprintf(param_name, "radio_%i", i); /* compose parameter path inside JSON structure */
-//         val = json_object_get_value(conf, param_name); /* fetch value (if possible) */
+//         memset(&rfconf, 0, sizeof(rfconf)); 
+//         sprintf(param_name, "radio_%i", i); 
+//         val = json_object_get_value(conf, param_name); 
 //         if (json_value_get_type(val) != JSONObject) {
 //             MSG("INFO: no configuration for radio %i\n", i);
 //             continue;
 //         }
-//         /* there is an object to configure that radio, let's parse it */
+// 
 //         sprintf(param_name, "radio_%i.enable", i);
 //         val = json_object_dotget_value(conf, param_name);
 //         if (json_value_get_type(val) == JSONBoolean) {
@@ -86,9 +82,9 @@ package main
 //         } else {
 //             rfconf.enable = false;
 //         }
-//         if (rfconf.enable == false) { /* radio disabled, nothing else to parse */
+//         if (rfconf.enable == false) { 
 //             MSG("INFO: radio %i disabled\n", i);
-//         } else  { /* radio enabled, will parse the other parameters */
+//         } else  { 
 //             snprintf(param_name, sizeof param_name, "radio_%i.freq", i);
 //             rfconf.freq_hz = (uint32_t)json_object_dotget_number(conf, param_name);
 //             snprintf(param_name, sizeof param_name, "radio_%i.rssi_offset", i);
@@ -107,7 +103,7 @@ package main
 //             if (json_value_get_type(val) == JSONBoolean) {
 //                 rfconf.tx_enable = (bool)json_value_get_boolean(val);
 //                 if (rfconf.tx_enable == true) {
-//                     /* tx notch filter frequency to be set */
+//                     
 //                     snprintf(param_name, sizeof param_name, "radio_%i.tx_notch_freq", i);
 //                     rfconf.tx_notch_freq = (uint32_t)json_object_dotget_number(conf, param_name);
 //                 }
@@ -116,23 +112,21 @@ package main
 //             }
 //             MSG("INFO: radio %i enabled (type %s), center frequency %u, RSSI offset %f, tx enabled %d, tx_notch_freq %u\n", i, str, rfconf.freq_hz, rfconf.rssi_offset, rfconf.tx_enable, rfconf.tx_notch_freq);
 //         }
-//         /* all parameters parsed, submitting configuration to the HAL */
 //         if (lgw_rxrf_setconf(i, rfconf) != LGW_HAL_SUCCESS) {
 //             MSG("ERROR: invalid configuration for radio %i\n", i);
 //             return -1;
 //         }
 //     }
 
-//     /* set configuration for LoRa multi-SF channels (bandwidth cannot be set) */
+//     
 //     for (i = 0; i < LGW_MULTI_NB; ++i) {
-//         memset(&ifconf, 0, sizeof(ifconf)); /* initialize configuration structure */
-//         sprintf(param_name, "chan_multiSF_%i", i); /* compose parameter path inside JSON structure */
-//         val = json_object_get_value(conf, param_name); /* fetch value (if possible) */
+//         memset(&ifconf, 0, sizeof(ifconf)); 
+//         sprintf(param_name, "chan_multiSF_%i", i); 
+//         val = json_object_get_value(conf, param_name); 
 //         if (json_value_get_type(val) != JSONObject) {
 //             MSG("INFO: no configuration for LoRa multi-SF channel %i\n", i);
 //             continue;
 //         }
-//         /* there is an object to configure that LoRa multi-SF channel, let's parse it */
 //         sprintf(param_name, "chan_multiSF_%i.enable", i);
 //         val = json_object_dotget_value(conf, param_name);
 //         if (json_value_get_type(val) == JSONBoolean) {
@@ -140,9 +134,9 @@ package main
 //         } else {
 //             ifconf.enable = false;
 //         }
-//         if (ifconf.enable == false) { /* LoRa multi-SF channel disabled, nothing else to parse */
+//         if (ifconf.enable == false) { 
 //             MSG("INFO: LoRa multi-SF channel %i disabled\n", i);
-//         } else  { /* LoRa multi-SF channel enabled, will parse the other parameters */
+//         } else  {
 //             sprintf(param_name, "chan_multiSF_%i.radio", i);
 //             ifconf.rf_chain = (uint32_t)json_object_dotget_number(conf, param_name);
 //             sprintf(param_name, "chan_multiSF_%i.if", i);
@@ -150,16 +144,15 @@ package main
 //             // TODO: handle individual SF enabling and disabling (spread_factor)
 //             MSG("INFO: LoRa multi-SF channel %i enabled, radio %i selected, IF %i Hz, 125 kHz bandwidth, SF 7 to 12\n", i, ifconf.rf_chain, ifconf.freq_hz);
 //         }
-//         /* all parameters parsed, submitting configuration to the HAL */
+//         
 //         if (lgw_rxif_setconf(i, ifconf) != LGW_HAL_SUCCESS) {
 //             MSG("ERROR: invalid configuration for Lora multi-SF channel %i\n", i);
 //             return -1;
 //         }
 //     }
 
-//     /* set configuration for LoRa standard channel */
-//     memset(&ifconf, 0, sizeof(ifconf)); /* initialize configuration structure */
-//     val = json_object_get_value(conf, "chan_Lora_std"); /* fetch value (if possible) */
+//     memset(&ifconf, 0, sizeof(ifconf)); 
+//     val = json_object_get_value(conf, "chan_Lora_std"); 
 //     if (json_value_get_type(val) != JSONObject) {
 //         MSG("INFO: no configuration for LoRa standard channel\n");
 //     } else {
@@ -199,9 +192,9 @@ package main
 //         }
 //     }
 
-//     /* set configuration for FSK channel */
-//     memset(&ifconf, 0, sizeof(ifconf)); /* initialize configuration structure */
-//     val = json_object_get_value(conf, "chan_FSK"); /* fetch value (if possible) */
+// 
+//     memset(&ifconf, 0, sizeof(ifconf)); 
+//     val = json_object_get_value(conf, "chan_FSK"); 
 //     if (json_value_get_type(val) != JSONObject) {
 //         MSG("INFO: no configuration for FSK channel\n");
 //     } else {
@@ -242,10 +235,9 @@ package main
 //     JSON_Value *root_val;
 //     JSON_Object *root = NULL;
 //     JSON_Object *conf = NULL;
-//     const char *str; /* pointer to sub-strings in the JSON data */
-//     unsigned long long ull = 0;
+//     const char *str; 
 
-//     /* try to parse JSON */
+//     
 //     root_val = json_parse_file_with_comments(conf_file);
 //     root = json_value_get_object(root_val);
 //     if (root == NULL) {
@@ -260,7 +252,6 @@ package main
 //         MSG("INFO: %s does contain a JSON object named %s, parsing gateway parameters\n", conf_file, conf_obj);
 //     }
 
-//     /* getting network parameters (only those necessary for the packet logger) */
 //     str = json_object_get_string(conf, "gateway_ID");
 //     if (str != NULL) {
 //         sscanf(str, "%llx", &ull);
@@ -276,11 +267,10 @@ package main
 //     int i;
 //     char iso_date[20];
 
-//     strftime(iso_date,ARRAY_SIZE(iso_date),"%Y%m%dT%H%M%SZ",gmtime(&now_time)); /* format yyyymmddThhmmssZ */
-//     log_start_time = now_time; /* keep track of when the log was started, for log rotation */
+//     strftime(iso_date,ARRAY_SIZE(iso_date),"%Y%m%dT%H%M%SZ",gmtime(&now_time)); 
 
 //     sprintf(log_file_name, "pktlog_%s_%s.csv", lgwm_str, iso_date);
-//     log_file = fopen(log_file_name, "a"); /* create log file, append if file already exist */
+//     log_file = fopen(log_file_name, "a"); 
 //     if (log_file == NULL) {
 //         MSG("ERROR: impossible to create log file %s\n", log_file_name);
 //         exit(EXIT_FAILURE);
@@ -296,27 +286,31 @@ package main
 //     return;
 // }
 
-/* describe command line options */
-void usage(void) {
+// void usage(void) {
+//	printf("*** Library version information ***\n%s\n\n", lgw_version_info());
+//     printf( "Available options:\n");
+//     printf( " -h print this help\n");
+//     printf( " -r <int> rotate log file every N seconds (-1 disable log rotation)\n");
+// }
 import "C"
 func main(){
 	var i, j int
-	struct timespec sleep_time = {0, 3000000}
+	var timespec sleep_time = {0, 3000000}
 	
 	var log_rotate_interval int = 3600
-	var int time_check int = 0
+	var  time_check int = 0
 	var pkt_in_log uint64 = 0
 	const global_conf_fname[] char = "global_conf.json"
     const local_conf_fname[] char = "local_conf.json"
 	const debug_conf_fname[] char = "debug_conf.json"
 	
 	var rxpkt[16] lgw_pkt_rx_s
-	var *p lgw_pkt_rx_s
+	var p *lgw_pkt_rx_s
 
 	var nb_pkt int
 	var fetch_time timespec
 	var fetch_timestamp[30]
-	var * x tm
+	var x *tm
 	for (i = getopt (argc, argv, "hr:")) != -1{
 		switch i{
 		case 'h':
@@ -367,7 +361,7 @@ func main(){
 		return EXIT_FAILURE;
 	}
 
-	var i:=lgw_start();
+	i =lgw_start();
 	if i == LGW_HAL_SUCCESS {
         MSG("INFO: concentrator started, packet can now be received\n");
     } else {
@@ -391,54 +385,32 @@ func main(){
            
             clock_gettime(CLOCK_REALTIME, &fetch_time);
             x = gmtime(&(fetch_time.tv_sec));
-            sprintf(fetch_timestamp,"%04i-%02i-%02i %02i:%02i:%02i.%03liZ",(x->tm_year)+1900,(x->tm_mon)+1,x->tm_mday,x->tm_hour,x->tm_min,x->tm_sec,(fetch_time.tv_nsec)/1000000); /* ISO 8601 format */
+            sprintf(fetch_timestamp,"%04i-%02i-%02i %02i:%02i:%02i.%03liZ",(x->tm_year)+1900,(x->tm_mon)+1,x->tm_mday,x->tm_hour,x->tm_min,x->tm_sec,(fetch_time.tv_nsec)/1000000); 
         }
 
 	for i=0; i < nb_pkt; ++i {
-		var p = &rxpkt[i];
+		p ：= &rxpkt[i];
 
-		/* writing gateway ID */
 		fprintf(log_file, "\"%08X%08X\",", (uint32_t)(lgwm >> 32), (uint32_t)(lgwm & 0xFFFFFFFF));
-
-		/* writing node MAC address */
-		fputs("\"\",", log_file); // TODO: need to parse payload
-
-		/* writing UTC timestamp*/
+		fputs("\"\",", log_file); 
 		fprintf(log_file, "\"%s\",", fetch_timestamp);
-		// TODO: replace with GPS time when available
-
-		/* writing internal clock */
 		fprintf(log_file, "%10u,", p->count_us);
-
-		/* writing RX frequency */
 		fprintf(log_file, "%10u,", p->freq_hz);
-
-		/* writing RF chain */
 		fprintf(log_file, "%u,", p->rf_chain);
-
-		/* writing RX modem/IF chain */
 		fprintf(log_file, "%2d,", p->if_chain);
-
-		/* writing status */
-		switch p->status {
+		switch p->status{
 			case STAT_CRC_OK:       fputs("\"CRC_OK\" ,", log_file); break;
 			case STAT_CRC_BAD:      fputs("\"CRC_BAD\",", log_file); break;
 			case STAT_NO_CRC:       fputs("\"NO_CRC\" ,", log_file); break;
 			case STAT_UNDEFINED:    fputs("\"UNDEF\"  ,", log_file); break;
 			default:                fputs("\"ERR\"    ,", log_file);
 		}
-
-		/* writing payload size */
 		fprintf(log_file, "%3u,", p->size);
-
-		/* writing modulation */
 		switch p->modulation {
 			case MOD_LORA:  fputs("\"LORA\",", log_file); break;
 			case MOD_FSK:   fputs("\"FSK\" ,", log_file); break;
 			default:        fputs("\"ERR\" ,", log_file);
 		}
-
-		/* writing bandwidth */
 		switch p->bandwidth {
 			case BW_500KHZ:     fputs("500000,", log_file); break;
 			case BW_250KHZ:     fputs("250000,", log_file); break;
@@ -451,7 +423,6 @@ func main(){
 			default:            fputs("-1    ,", log_file);
 		}
 
-		/* writing datarate */
 		if p->modulation == MOD_LORA {
 			switch p->datarate {
 				case DR_LORA_SF7:   fputs("\"SF7\"   ,", log_file); break;
@@ -468,7 +439,6 @@ func main(){
 			fputs("\"ERR\"   ,", log_file);
 		}
 
-		/* writing coderate */
 		switch p->coderate {
 			case CR_LORA_4_5:   fputs("\"4/5\",", log_file); break;
 			case CR_LORA_4_6:   fputs("\"2/3\",", log_file); break;
@@ -478,13 +448,10 @@ func main(){
 			default:            fputs("\"ERR\",", log_file);
 		}
 
-		/* writing packet RSSI */
 		fprintf(log_file, "%+.0f,", p->rssi);
 
-		/* writing packet average SNR */
 		fprintf(log_file, "%+5.1f,", p->snr);
 
-		/* writing hex-encoded payload (bundled in 32-bit words) */
 		fputs("\"", log_file);
 		for j = 0; j < p->size; ++j {
 			if (j > 0) && (j%4 == 0)){
@@ -493,7 +460,6 @@ func main(){
 			fprintf(log_file, "%02X", p->payload[j]);
 		}
 
-		/* end of log file line */
 		fputs("\"\n", log_file);
 		fflush(log_file);
 		pkt_in_log=1+pkt_in_log;
